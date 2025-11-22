@@ -1,6 +1,7 @@
 # RPUDet: Learning Relational Prior and Uncertainty for Robust Aerial Object Detection
 
-framework:
-figure/rpudet.png
+rpudet framework:
+models/detect/rpudet.yaml
+
 
 Other content is coming soon, and it will be uploaded as soon as possible.
