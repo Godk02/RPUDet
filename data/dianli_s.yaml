@@ -1,0 +1,15 @@
+path: /home/qk/data/  # dataset root dir
+train: select_generated/  # train images (relative to 'path') 
+val: new_test/  # val images (relative to 'path') 
+test: new_test/  #  test images (relative to 'path') 
+# Classes
+names:
+  0: Suspension insulator
+  1: Pin insulator
+  2: Pillar insulator
+  3: Butterfly insulator
+  4: Isolation knife
+  5: Transformer
+  6: Pole
+
+

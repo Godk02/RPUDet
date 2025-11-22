@@ -1,0 +1,92 @@
+# GRU-Det
+# parameters
+nc: 8  # number of classes
+depth_multiple: 1.0  # model depth multiple
+width_multiple: 1.0  # layer channel multiple
+#activation: nn.LeakyReLU(0.1)
+#activation: nn.ReLU()
+
+# anchors
+anchors: 3
+
+# gelan backbone
+backbone:
+  [
+   # conv down
+   [-1, 1, Conv, [64, 3, 2]],  # 0-P1/2
+
+   # conv down
+   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4
+
+   # elan-1 block (increased channels for better feature extraction)
+   [-1, 1, RepNCSPELAN4, [256, 256, 128, 1]],  # 2
+
+   # avg-conv down
+   [-1, 1, DWdown, [256]],  # 3-P3/8
+
+   # elan-2 block (increased channels for better feature extraction)
+   [-1, 1, RepNCSPELAN4, [512, 512, 256, 1]],  # 4
+
+   # avg-conv down
+   [-1, 1, DWdown, [512]],  # 5-P4/16
+
+   # elan-3 block (increased channels for better feature extraction)
+   [-1, 1, RepNCSPELAN4, [512, 512, 256, 1]],  # 6
+  ]
+
+# gelan head
+head:
+  [
+   # elan-spp block (modified for better feature extraction)
+   [-1, 1, RSPPPELAN, [512, 256]],  # 7
+
+   # GCN5 block (global context attention, modified channels)
+   [-1, 1, EGCN, [512]],  # 8
+
+   # up-concat merge
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],  # 9
+
+   # Concatenate backbone P3
+   [[-1, 4], 1, Concat, [1]],  # 10
+
+   # elan-2 block (increased channels)
+   [-1, 1, RepNCSPELAN4, [256, 256, 128, 1]],  # 11 
+
+   # up-concat merge
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']], # 12
+
+   # Concatenate backbone P2
+   [[-1, 2], 1, Concat, [1]],  # 13
+
+   # elan-3 block (for small targets at P3/8)
+   [-1, 1, RepNCSPELAN4, [128, 128, 64, 1]],  # 14 (P3/8-small)
+
+   # avg-conv down merge
+   [-1, 1, DWdown, [256]],  # 15
+
+   # Concatenate head P4
+   [[-1, 11], 1, Concat, [1]],  # 16
+
+   # **Fixing the redundancy**: Modify 17th layer to improve feature diversity
+   # Now, instead of using the same module, we'll increase the channels for better feature extraction
+   [-1, 1, RepNCSPELAN4, [128, 256, 128, 1]],  # 17 (P3/8-small, increased channels)
+
+   # avg-conv down merge
+   [-1, 1, DWdown, [256]],  # 18
+
+   # Concatenate head P4
+   [[-1, 7], 1, Concat, [1]],  # 19
+
+   # elan-3 block (increased channels)
+   [-1, 1, RepNCSPELAN4, [512, 512, 256, 1]],  # 20 (P4/16-medium)
+
+   [14, 1, UDM,[]],  # 21
+   [17, 1, UDM,[]],  # 22
+   [20, 1, UDM,[]],  # 23
+
+
+
+   # detect
+   [[21,22,23], 1, DDetect, [nc]],  # DDetect(P3, P4, P5)
+  ]
+

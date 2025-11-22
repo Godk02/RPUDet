@@ -1,0 +1,18 @@
+path: /home/qk/data/  # dataset root dir
+train: VisDrone2019-DET-train/  # train images (relative to 'path') 
+val: VisDrone2019-DET-val/  # val images (relative to 'path') 
+test:   #  test images (relative to 'path') 
+# Classes
+names:
+  0: pedestrian
+  1: people
+  2: bicycle
+  3: car
+  4: van
+  5: truck
+  6: tricycle
+  7: awning-tricycle
+  8: bus
+  9: motor
+
+

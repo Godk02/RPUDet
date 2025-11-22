@@ -1,0 +1,14 @@
+path: /home/qk/data/vedai/VEDAI  
+train: fold03_write.txt          
+val: fold03test_write.txt        
+test: fold03test_write.txt       
+# Classes
+names:
+  0: car
+  1: pickup
+  2: camping
+  3: truck
+  4: other
+  5: tractor
+  6: boat
+  7: van

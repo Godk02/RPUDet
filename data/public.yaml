@@ -1,0 +1,18 @@
+path: /home/qk/data/public/  # dataset root dir
+train: train/  # train images (relative to 'path') 
+val: test/  # val images (relative to 'path') 
+test: test/  #  test images (relative to 'path') 
+# Classes
+names:
+    0: baliser_ok, 
+    1: baliser_aok, 
+    2: baliser_nok, 
+    3: insulator_ok, 
+    4: insulator_nok, 
+    5: bird_nest, 
+    6: stockbridge_ok, 
+    7: stockbridge_nok, 
+    8: spacer_ok, 
+    9: spacer_nok, 
+    10: insulator_unk,
+
